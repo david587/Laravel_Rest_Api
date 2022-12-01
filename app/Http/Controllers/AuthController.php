@@ -41,20 +41,20 @@ class AuthController extends BaseController
             "confirm_password" =>"required|same:password"
         ]);
         //a validáló nemsikerült
-        if($validator->fails){
-            return sendError("Error Validation", $validator->errors() );
+        if($validator->fails()){
+            return $this->sendError("Error Validation", $validator->errors() );
         }
 
         //ha minden oke fut tovább a program
         $input = $request->all();
         //titkositva küldjük be az adatbázisba
-        $input["password"] = bcript( $input["password"] );
+        $input["password"] = bcrypt( $input["password"] );
         //ide átadunk mindent
         $user = User::create($input);
         //üzenetek
         // BaseControllerben a result=$success
         $success["name"] = $user->name;
 
-        return sendResponse( $success, "Sikeres regisztráció");
+        return $this->sendResponse( $success, "Sikeres regisztráció");
     }
 }
